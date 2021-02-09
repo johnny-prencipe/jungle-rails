@@ -15,10 +15,11 @@ RSpec.feature "FirstFeatureTests", type: :feature, js: true do
     end
   end
 
-  scenario "Adds to cart successfully" do
+  scenario "Navigates to the product details page successfully" do
     visit root_path
-    click_button('Add', match: :first)
-    page.should have_content('(1)')
+    find('h4', match: :first).click
+    save_screenshot
+    expect(page).to have_css 'section.products-show'
   end
   
 end
