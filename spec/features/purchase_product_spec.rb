@@ -1,32 +1,29 @@
 require 'rails_helper'
-# visit homepage
-# find (first) product box
-# click blue add button
-# check nav to see if cart quantity has updated
-# click on cart navigation 
-# check if product is in the cart
 
-RSpec.feature "PurchaseProducts", type: :feature, js: true do
+RSpec.feature "Visitor navigates to home page", type: :feature, js: true do
 
+  # SETUP
   before :each do
-    @category = Category.create! name: "test category"
-    # name: "test category", category: @category
-    @category.products.create!(
-      name: "test product",
-      description: "test description",
-      image: "-",
-      quantity: 5,
-      price: 12.50
-    )
+    @category = Category.create! name: 'Apparel'
+
+    10.times do |n|
+      @category.products.create!(
+        name:  Faker::Hipster.sentence(3),
+        description: Faker::Hipster.paragraph(4),
+        quantity: 10,
+        price: 64.99
+      )
+    end
   end
 
-  scenario "An anonymous user purchases a product" do
-    visit '/'
-    page.save_screenshot()
-    first('article').find_button('Add').click()
-    find_link('My Cart (1)').click()
-    assert page.has_content?('test product')
-    assert page.has_content?('12.50')
-  end
+  scenario "They see all products" do
+    # ACT
+    visit root_path
 
+    # DEBUG
+    # save_screenshot
+
+    # VERIFY
+    expect(page).to have_css 'article.product', count: 10
+  end
 end
